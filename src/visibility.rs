@@ -19,9 +19,8 @@ fn visibility_system(
     mut viewsheds_positions: Query<(&mut ViewShed, &Transform)>,
     map: ResMut<Map>,
     map_tiles: Query<(Entity), With<Tile>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    for (mut viewshed, transform) in viewsheds_positions.iter_mut() {
+    for (mut viewshed, transform) in &mut viewsheds_positions {
         viewshed.visible_tiles.clear();
         let x = (transform.translation.x / 32.0) as i32;
         let y = (transform.translation.y / -32.0) as i32;
@@ -35,7 +34,7 @@ fn visibility_system(
         // warn!("{:?}", visible_tiles);
         // let mut iter = map_tiles.iter_combinations();
         // while let Some([(tile, handle)]) = iter.fetch_next() {
-        for tile in map_tiles.iter() {
+        for tile in &map_tiles {
             // let color = &mut materials.get_mut(handle).unwrap().color;
             // warn!("{:?}", tile.id());
             if visible_tiles.contains(&(tile.id() as usize)) {

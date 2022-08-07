@@ -8,6 +8,7 @@ mod map;
 mod map_builders;
 mod player;
 mod rect;
+mod visibility;
 
 use ascii::{AsciiPlugin, AsciiSheet};
 use camera::CameraPlugin;
@@ -16,6 +17,7 @@ use debug::DebugPlugin;
 use map::{draw_map, Map, TileType};
 use player::PlayerPlugin;
 use rect::Rect;
+use visibility::VisibilityPlugin;
 
 pub const CLEAR: Color = Color::rgb(0.1, 0.1, 0.1);
 pub const RESOLUTION: f32 = 16.0 / 9.0;
@@ -48,5 +50,6 @@ fn main() {
         .add_plugin(DebugPlugin)
         // .add_plugin(TileMapPlugin)
         .add_plugin(CameraPlugin)
+        .add_plugin(VisibilityPlugin)
         .run();
 }

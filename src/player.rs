@@ -1,6 +1,6 @@
 use crate::{
     ascii::spawn_ascii_sprite,
-    components::{Position, TileCollider},
+    components::{Position, TileCollider, ViewShed},
     AsciiSheet, TILE_SIZE,
 };
 use bevy::{prelude::*, sprite::collide_aabb::collide};
@@ -27,7 +27,6 @@ fn player_movement(
     keyboard: Res<Input<KeyCode>>,
 ) {
     let mut transform = player_query.single_mut();
-
     let mut y_delta = 0.0;
     let mut x_delta = 0.0;
     if keyboard.just_pressed(KeyCode::W)
@@ -130,5 +129,16 @@ fn spawn_player(mut commands: Commands, ascii: Res<AsciiSheet>, position: Res<Po
     commands
         .entity(player)
         .insert(Name::new("Player"))
-        .insert(Player { speed: 30.0 });
+        .insert(Player { speed: 30.0 })
+        .insert(ViewShed {
+            visible_tiles: Vec::new(),
+            range: 8,
+        });
+}
+
+fn try_move_player(
+    mut player_query: Query<&mut Transform, With<Player>>,
+    wall_query: Query<&Transform, (With<TileCollider>, Without<Player>)>,
+) {
+    let mut transform = player_query.single_mut();
 }

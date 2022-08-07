@@ -9,8 +9,11 @@ pub struct Position {
 pub struct ViewShed {
     pub visible_tiles: Vec<Entity>,
     pub range: i32,
-    pub dirty: bool,
+    // pub dirty: bool,
 }
 
 #[derive(Component)]
 pub struct TileCollider;
+
+#[derive(Component, Debug)]
+pub struct Tile {}

@@ -1,6 +1,6 @@
 use super::{AsciiSheet, TILE_SIZE};
 use crate::ascii::spawn_ascii_sprite;
-use crate::components::TileCollider;
+use crate::components::{Tile, TileCollider};
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 
@@ -66,7 +66,7 @@ impl Map {
     }
 }
 
-pub fn draw_map(map: Res<Map>, mut commands: Commands, ascii: Res<AsciiSheet>) {
+pub fn draw_map(map: ResMut<Map>, mut commands: Commands, ascii: Res<AsciiSheet>) {
     let mut y = 0;
     let mut x = 0;
 
@@ -83,7 +83,7 @@ pub fn draw_map(map: Res<Map>, mut commands: Commands, ascii: Res<AsciiSheet>) {
             &mut commands,
             &ascii,
             char as usize,
-            Color::rgb(0.9, 0.9, 0.9),
+            Color::rgba(0.9, 0.9, 0.9, 1.0),
             Vec3::new(
                 x as f32 * 32.0 * TILE_SIZE,
                 -(y as f32) * TILE_SIZE * 32.0,
@@ -93,6 +93,12 @@ pub fn draw_map(map: Res<Map>, mut commands: Commands, ascii: Res<AsciiSheet>) {
         if char == '#' {
             commands.entity(tile).insert(TileCollider);
         }
+        commands
+            .entity(tile)
+            .insert(Visibility { is_visible: false })
+            .insert(Tile {});
+        // warn!("{:?}", ent);
+        // warn!("{:?}", id);
         tiles.push(tile);
 
         // Move the coordinates
@@ -104,7 +110,7 @@ pub fn draw_map(map: Res<Map>, mut commands: Commands, ascii: Res<AsciiSheet>) {
     }
     commands
         .spawn()
-        .insert(Name::new("Map"))
+        .insert(Name::new("Tiles"))
         .insert_bundle(SpatialBundle {
             visibility: Visibility { is_visible: true },
             ..default()
